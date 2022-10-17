@@ -1,5 +1,5 @@
 import Axios from "axios"
-import {useEffect, useState} from 'react'
+import {useEffect, useState, useRef} from 'react'
 import { ToastContainer, toast } from "react-toastify";
 import {Container, Row, Col, Spinner, Button} from 'reactstrap'
 
@@ -11,6 +11,8 @@ const UserDashboard = () => {
 
     const [userDetails, setUserDetails] = useState({});
     const [startSpinner, setStartSpinner] = useState(false);
+
+    const initialRender = useRef(true);
 
     const fetchUserDetails = async() => {
         try {
@@ -29,7 +31,11 @@ const UserDashboard = () => {
     }
 
 useEffect(() => {
-    fetchUserDetails()
+    if (initialRender.current) {
+      initialRender.current = false;
+    } else {
+        fetchUserDetails();
+    }
     return () => {
       setUserDetails({})
     }
